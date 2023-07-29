@@ -23,23 +23,10 @@ ignore = ".*(align|apktool.yml|pak|MF|RSA|SF|bin|so)"
 # ignoring third packages
 thirdpackage = ["android", "androidx", "huawei", "vivo", "oppo", "xiaomi", "umeng"]
 
-
 count = 0
 args = None
 d = difflib.Differ()
 diffratios = []
-
-'''
-
-class bcolors:
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    OKORANGE = '\033[93m'
-    FAIL = '\033[91m'
-
-def format(string, col):
-    return col + string + '\033[0m'
-'''
 
 
 class bcolors:
@@ -71,6 +58,8 @@ def main():
     global args
     args = parser.parse_args()
 
+    # print(args)
+
     # Make sure the APKs exist.
     exists(args.apk1)
     exists(args.apk2)
@@ -78,9 +67,19 @@ def main():
     # Check the temporary folder exists & clear it.
     folderExists(args.output, True)
 
+    # get package name
+    package1 = getPackageName(args.apk1)
+    package2 = getPackageName(args.apk2)
+
+    # get apk name
+    apk1 = getApkName(args.apk1)
+    apk2 = getApkName(args.apk2)
+
     # Individual folders for each APK.
-    temp1 = os.path.join(args.output, "1/")
-    temp2 = os.path.join(args.output, "2/")
+    temp1 = os.path.join(args.output, '1/')
+    temp2 = os.path.join(args.output, '2/')
+
+    print("apk folders: ", temp1, temp2)
 
     folderExists(temp1, True)
     folderExists(temp2, True)
@@ -93,8 +92,6 @@ def main():
 
     # package1 = getPackageName(temp1 + "AndroidManifest.xml")
     # package2 = getPackageName(temp2 + "AndroidManifest.xml")
-    package1 = getPackageName(args.apk1)
-    package2 = getPackageName(args.apk2)
 
     compare(os.path.join(temp1, "smali/", package1), os.path.join(temp2, "smali/", package2), args.unique)
 
@@ -108,27 +105,24 @@ def main():
     if args.meld:
         call(["meld", temp1, temp2])
 
+
+# get apk name
+def getApkName(apkname):
+    apkn = apkname.split("/")[-1]
+    apkn = apkn.split(".")[0]
+    return apkn
+
+
 # get package name
 def getPackageName(filepath):
-    # data = ''
-    # with open(filepath, 'r') as f:
-    #     data = f.read()
-    # dom = parseString(data)
-
-    # parser = ET.XMLParser(recover=True)
-    # tree = ET.parse(filepath, parser=parser)
-    # root = tree.getroot()
-    # print("root: ")
-    # print(root.tag)
-    # packageName = root.attrib['package']
-    # print("package name: " + packageName)
-
     a = apk.APK(filepath)
     packageName = a.get_package()
     packageName = packageName.replace('.', '/')
     print("package name: " + packageName)
     return packageName
 
+
+# use apktool to disassemble apk files
 def apktoolit(file, dir):
     print("Running apktool against '" + format(file, bcolors.OKBLUE) + "'")
     call(["apktool", "d", "-r", "-f", "-o", dir, file], stdout=open(os.devnull, 'w'), stderr=STDOUT)
@@ -169,17 +163,14 @@ def compare(folder1, folder2, printunique):
     print("")
     compared = dircmp(folder1, folder2)
 
-    # filter unconcerned .smali file
-    # compared = diff_filter(compared)
-
     uniqueleft, uniqueright = report_full_closure(compared)
     print("\n\t" + format(str(count), bcolors.OKBLUE) + " files are different.\n")
 
     diff_num = 0
-    # print(*diffratios, sep = "\n")
+    print(*diffratios, sep="\n")
     print("num of diff files: " + str(len(diffratios)))
 
-    for dr in diffratios: 
+    for dr in diffratios:
         if dr < 0.8:
             diff_num = diff_num + 1
     print("num of diff files which is less than 0.8: " + str(diff_num))
@@ -213,8 +204,8 @@ def getfiles(base, folders, root):
 
 def report_full_closure(self, uniqueleft=[], uniqueright=[], rootcmp=None):
     # print diff files
-    # if self.diff_files:
-    #     print_cmp(self)
+    if self.diff_files:
+        print_cmp(self)
 
     if not rootcmp:
         rootcmp = self
@@ -223,16 +214,16 @@ def report_full_closure(self, uniqueleft=[], uniqueright=[], rootcmp=None):
     uniqueright += getfiles(self.right, self.right_only, rootcmp.right)
     for name in self.diff_files:
         if not re.match(ignore, name):
-            # print("[" + format(name, bcolors.OKGREEN) + "] " +
-                  # format(self.left.replace(args.output + "1", ""), bcolors.OKBLUE))
+            print("[" + format(name, bcolors.OKGREEN) + "] " +
+                  format(self.left.replace(args.output + "1", ""), bcolors.OKBLUE))
 
             content1 = reader(os.path.join(self.left, name)).splitlines(1)
             content2 = reader(os.path.join(self.right, name)).splitlines(1)
-
             diff = difflib.unified_diff(content1, content2)
 
             # print(list(diff))
-            filter(list(diff), name, self.left.replace(args.output + "1", ""))
+
+            filter(list(diff))
 
             global count
             count += 1
@@ -244,12 +235,11 @@ def report_full_closure(self, uniqueleft=[], uniqueright=[], rootcmp=None):
 
 
 # filter for generated diff 
-def filter(lines, name, dir):
-
+def filter(lines):
     line1 = ""
     line2 = ""
     allline = ""
-
+    # print(lines)
     for line in lines:
         allline += line
         if line[:1] == "+":
@@ -257,7 +247,9 @@ def filter(lines, name, dir):
         elif line[:1] == "-":
             line2 += line
 
-    # compare two lines
+    # print("compute diff ratio")
+    # diffratio = difflib.SequenceMatcher(None, line1, line2).quick_ratio()
+
     if line1 == "" or line2 == "":
         diffratio = 0
     else:
@@ -267,30 +259,12 @@ def filter(lines, name, dir):
         # diffratio = algorithims.cosine(line1, line2)
     diffratios.append(diffratio)
 
+    # if diff ratio less than 0.8, print all diff lines
+    if diffratio < 0.8:
+        for line in lines:
+            print(line)
+        print("diff ratio: " + str(diffratio) + "\n\n")
 
-
-    filterline = ''
-    for line in lines:
-        if isContainMethod(line):
-            filterline += line
-
-    if filterline != '' and diffratio < 0.8:
-        print('[', name, '] ', dir)
-        print("diff ratio: " + str(diffratio))
-        # print('file len: ', len(filterline))
-        print(filterline, '\n.endfile\n')
-        # for line in lines:
-        #     # contain method invoke
-        #     if isContainMethod(line):
-        #         print(line)
-        
-
-def isContainMethod(line):
-    #if line.find('-') != -1 or line.find('+') != -1:
-    if line[:1] == "+" or line[:1] == "-":
-        if line.find('method') != -1 or line.find('invoke') != -1:
-            return True
-    return False
 
 def reader(file):
     f = open(file, 'r', encoding='utf8', errors='ignore')

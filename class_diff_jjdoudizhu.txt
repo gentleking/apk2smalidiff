@@ -1,0 +1,19 @@
+
+			 apktool
+
+Running apktool against '../samples/JJ斗地主-5-14-01.apk'
+[OK]
+Running apktool against '../samples/JJ斗地主-5-14-02.apk'
+[OK]
+Merging additional smali folders
+	/tmp/apkdiff/JJ斗地主/1/smali_classes2 > /tmp/apkdiff/JJ斗地主/1/smali
+	/tmp/apkdiff/JJ斗地主/1/smali_classes3 > /tmp/apkdiff/JJ斗地主/1/smali
+	/tmp/apkdiff/JJ斗地主/1/smali_classes4 > /tmp/apkdiff/JJ斗地主/1/smali
+	/tmp/apkdiff/JJ斗地主/1/smali_classes5 > /tmp/apkdiff/JJ斗地主/1/smali
+[OK]
+Merging additional smali folders
+	/tmp/apkdiff/JJ斗地主/2/smali_classes2 > /tmp/apkdiff/JJ斗地主/2/smali
+	/tmp/apkdiff/JJ斗地主/2/smali_classes3 > /tmp/apkdiff/JJ斗地主/2/smali
+	/tmp/apkdiff/JJ斗地主/2/smali_classes4 > /tmp/apkdiff/JJ斗地主/2/smali
+	/tmp/apkdiff/JJ斗地主/2/smali_classes5 > /tmp/apkdiff/JJ斗地主/2/smali
+[OK]

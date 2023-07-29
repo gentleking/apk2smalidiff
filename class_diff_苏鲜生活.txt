@@ -1,0 +1,13 @@
+
+			 apktool
+
+Running apktool against '../samples/苏鲜生活-1-9-1.apk'
+[OK]
+Running apktool against '../samples/苏鲜生活-1-9-3.apk'
+[OK]
+Merging additional smali folders
+[OK]
+Merging additional smali folders
+[OK]
+count of existing files:  5495
+count of total class files:  5495
