@@ -1,4 +1,0 @@
-
-			 apktool
-
-'../samples/马蜂窝-10-7-6.apk' does not exist.
