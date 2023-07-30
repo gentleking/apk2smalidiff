@@ -1,28 +1,33 @@
+['This is a Test! #var\n', 'The test is how to compare. v1\n', 'The Way that can be told of is not the eternal Way; v2\n', 'The name that can be named is not the eternal name. v3\n', 'The Nameless is the origin of Heaven and Earth;\n', 'The Named is the mother of all things.\n', 'Therefore let there always be non-being,\n', '  so we may see their subtlety,\n', 'And let there always be being,\n', '  so we may see their outcome.\n', 'The two are the same,\n', 'But after they are produced,\n', '  they have different names.']
 --- 
 
 +++ 
 
 @@ -1,13 +1,15 @@
 
--This is a Test!
+-This is a Test! #var
 
-+The Nameless is the origin of Heaven and Earth;
+-The test is how to compare. v1
 
-+The named is the mother of all things.
+-The Way that can be told of is not the eternal Way; v2
 
-+
-
- The test is how to compare.
-
--The Way that can be told of is not the eternal Way;
-
--The name that can be named is not the eternal name.
+-The name that can be named is not the eternal name. v3
 
 -The Nameless is the origin of Heaven and Earth;
 
 -The Named is the mother of all things.
 
- Therefore let there always be non-being,
+-Therefore let there always be non-being,
+
++The Nameless is the origin of Heaven and Earth; #var
+
++The named is the mother of all things. v2
+
++
+
++The test is how to compare. v3
+
++Therefore let there always be non-being, v4
 
    so we may see their subtlety,
 

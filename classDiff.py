@@ -16,6 +16,7 @@ import tempfile
 from androguard.core.bytecodes import apk
 from fuzzy_match import match
 from fuzzy_match import algorithims
+# as ps
 
 
 # diff_ratios = []
@@ -24,7 +25,7 @@ temp1 = ""
 temp2 = ""
 apkName = ""
 
-fileter_word = ["field", "line", "const", "0x", "local", "nop", "array"]
+fileter_word = ["field", "line", "const", "0x", "local", "nop", "array", "move"]
 
 key_words = ["invoke", "method"]
 
@@ -165,6 +166,9 @@ def class_compare():
             if similarity > 0.8:
                 content1 = reader(file_path1).splitlines(1)
                 content2 = reader(file_path2).splitlines(1)
+                
+                content1 = preprocessing(content1)
+                content2 = preprocessing(content2)
                 diff = difflib.unified_diff(content1, content2, file_path1, file_path2)
                 filter(list(diff))
     file.close()
@@ -172,6 +176,13 @@ def class_compare():
     print("count of existing files: ", count)
     print("count of total class files: ", class_count)
 
+
+def preprocessing(content):
+    var = ["p0", "p1", "p2", "p3", "v0", "v1", "v2", "v3", "v4", "v5"]
+    for i in range(0, len(content)):
+        for v in var:
+            content[i] = content[i].replace(v, '#var')
+    return content
 
 
 def filter(lines):
