@@ -158,12 +158,13 @@ def class_compare():
         class_count += 1
         left_class = line.split(":")[0].replace(".", "/") + ".smali"
         right_class = line.split(":")[1].replace(".", "/") + ".smali"
-        similarity = float(line.split(":")[-1])
+        similarity = float(line.split(":")[-2])
+        threshold = float(line.split(":")[-1])
         file_path1 = os_path1 + left_class
         file_path2 = os_path2 + right_class
         if exists(file_path1) and exists(file_path2):
             count += 1
-            if similarity > 0.8:
+            if similarity > threshold:
                 content1 = reader(file_path1).splitlines(1)
                 content2 = reader(file_path2).splitlines(1)
                 
