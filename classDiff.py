@@ -16,7 +16,6 @@ import tempfile
 from androguard.core.bytecodes import apk
 from fuzzy_match import match
 from fuzzy_match import algorithims
-# as ps
 
 
 # diff_ratios = []
@@ -25,7 +24,7 @@ temp1 = ""
 temp2 = ""
 apkName = ""
 
-fileter_word = ["field", "line", "const", "0x", "local", "nop", "array", "move"]
+fileter_word = ["field", "line", "const", "0x", "local", "nop", "array", "move", "annotation"]
 
 key_words = ["invoke", "method"]
 
@@ -144,9 +143,8 @@ def mergefolders(root_src_dir, root_dst_dir):
 def class_compare():
     os_path1 = temp1
     os_path2 = temp2
-    # print("apkname: ", apkName)
     fileName = "classPairOutput_" + apkName + ".txt"
-    # file = open("classPairOutput.txt")
+
     file = open(fileName)
     lines = file.readlines()
     left_class = ""
