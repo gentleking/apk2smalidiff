@@ -144,6 +144,7 @@ def class_compare():
     os_path1 = temp1
     os_path2 = temp2
     fileName = "classPairOutput_" + apkName + ".txt"
+    fileName = "classPairOutput_{}.txt".format(apkName)
 
     file = open(fileName)
     lines = file.readlines()
@@ -174,6 +175,12 @@ def class_compare():
 
     print("count of existing files: ", count)
     print("count of total class files: ", class_count)
+
+
+# def class_parser(content):
+#     class_
+#     for line in content:
+
 
 
 def preprocessing(content):
