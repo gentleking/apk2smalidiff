@@ -1,0 +1,23 @@
+
+			 apktool
+
+Running apktool against '../samples/有影-4-21-0.apk'
+[OK]
+Running apktool against '../samples/有影-4-21-1.apk'
+[OK]
+Merging additional smali folders
+	/tmp/apkdiff/有影/1/smali_classes2 > /tmp/apkdiff/有影/1/smali
+	/tmp/apkdiff/有影/1/smali_classes3 > /tmp/apkdiff/有影/1/smali
+[OK]
+Merging additional smali folders
+	/tmp/apkdiff/有影/2/smali_classes2 > /tmp/apkdiff/有影/2/smali
+	/tmp/apkdiff/有影/2/smali_classes3 > /tmp/apkdiff/有影/2/smali
+[OK]
++    invoke-static {}, Lcom/yymedias/util/w;->a()Lcom/yymedias/util/w;
++    invoke-virtual {#var, #var}, Lcom/yymedias/util/w;->b(Ljava/lang/String;)Z
++    if-eqz #var, :cond_2
+--- /tmp/apkdiff/有影/1/smali/com/yymedias/ui/find/recommend/RecommendFragment.smali
++++ /tmp/apkdiff/有影/2/smali/com/yymedias/ui/find/recommend/RecommendFragment.smali
+
+count of existing files:  21748
+count of total class files:  21748
