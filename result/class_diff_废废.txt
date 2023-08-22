@@ -1,0 +1,74 @@
+
+			 apktool
+
+Running apktool against '../samples/废废-4.3.9.apk'
+[OK]
+Running apktool against '../samples/废废-4.4.0.apk'
+[OK]
+Merging additional smali folders
+	/tmp/apkdiff/废废/1/smali_classes2 > /tmp/apkdiff/废废/1/smali
+[OK]
+Merging additional smali folders
+	/tmp/apkdiff/废废/2/smali_classes2 > /tmp/apkdiff/废废/2/smali
+[OK]
++    invoke-static {#var, #var}, Lcom/newcolor/qixinginfo/util/LogUtils;->i(Ljava/lang/String;Ljava/lang/String;)V
+--- /tmp/apkdiff/废废/1/smali/com/newcolor/qixinginfo/fragment/ShiChangFragment$JsToAndroid.smali
++++ /tmp/apkdiff/废废/2/smali/com/newcolor/qixinginfo/fragment/ShiChangFragment$JsToAndroid.smali
+
+-    invoke-virtual {#var, #var}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
+-    invoke-interface {v6, #var, #var}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {#var, #var}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++    invoke-interface {v6, #var, #var}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+--- /tmp/apkdiff/废废/1/smali/com/newcolor/qixinginfo/fragment/ShiChangFragment$13.smali
++++ /tmp/apkdiff/废废/2/smali/com/newcolor/qixinginfo/fragment/ShiChangFragment$13.smali
+
+-    invoke-virtual {#var, #var}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
+-    invoke-interface {v6, #var, #var}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {#var, #var}, Lorg/json/JSONObject;->getString(Ljava/lang/String;)Ljava/lang/String;
++    invoke-interface {v6, #var, #var}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+--- /tmp/apkdiff/废废/1/smali/com/newcolor/qixinginfo/fragment/ShangQuanFragment$20.smali
++++ /tmp/apkdiff/废废/2/smali/com/newcolor/qixinginfo/fragment/ShangQuanFragment$20.smali
+
++    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
++    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$1200(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;
++    if-eqz #var, :cond_0
++    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
++    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$1200(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;
++    invoke-virtual {#var}, Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;->isRefreshing()Z
++    if-eqz #var, :cond_0
++    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
++    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$1200(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;
++    if-eqz #var, :cond_0
++    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
++    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$1200(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;
++    invoke-virtual {#var}, Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;->isRefreshing()Z
++    if-eqz #var, :cond_0
+-    if-eqz #var, :cond_0
+-    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
+-    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$1200(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;
+-    invoke-virtual {#var}, Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;->isRefreshing()Z
+-    if-eqz #var, :cond_0
+-    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
+-    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$1200(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)Lcom/newcolor/qixinginfo/view/VerticalSwipeRefreshLayout;
++    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
++    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$100(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)V
+-    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$100(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)V
++    invoke-static {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->access$1300(Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;)Lcom/newcolor/qixinginfo/ui/pullrefresh/PullToRefreshSwipeMenuListView;
++    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
++    invoke-virtual {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->getActivity()Landroid/support/#var/app/FragmentActivity;
++    invoke-static {#var}, Lcom/newcolor/qixinginfo/ui/pullrefresh/RefreshTime;->getRefreshTime(Landroid/content/Context;)Ljava/lang/String;
++    invoke-virtual {#var, #var}, Lcom/newcolor/qixinginfo/ui/pullrefresh/PullToRefreshSwipeMenuListView;->setRefreshTime(Ljava/lang/String;)V
+-    iget-object #var, #var, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment$5;->this$0:Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;
+-    invoke-virtual {#var}, Lcom/newcolor/qixinginfo/fragment/SubscribeFragment;->getActivity()Landroid/support/#var/app/FragmentActivity;
+-    invoke-static {#var}, Lcom/newcolor/qixinginfo/ui/pullrefresh/RefreshTime;->getRefreshTime(Landroid/content/Context;)Ljava/lang/String;
+-    invoke-virtual {#var, #var}, Lcom/newcolor/qixinginfo/ui/pullrefresh/PullToRefreshSwipeMenuListView;->setRefreshTime(Ljava/lang/String;)V
++    invoke-virtual {#var}, Lcom/newcolor/qixinginfo/ui/pullrefresh/PullToRefreshSwipeMenuListView;->stopRefresh()V
+--- /tmp/apkdiff/废废/1/smali/com/newcolor/qixinginfo/fragment/SubscribeFragment$5.smali
++++ /tmp/apkdiff/废废/2/smali/com/newcolor/qixinginfo/fragment/SubscribeFragment$5.smali
+
++    invoke-static {#var, #var}, Lcom/newcolor/qixinginfo/util/LogUtils;->i(Ljava/lang/String;Ljava/lang/String;)V
+--- /tmp/apkdiff/废废/1/smali/com/newcolor/qixinginfo/fragment/ShangQuanFragment$JsToAndroid.smali
++++ /tmp/apkdiff/废废/2/smali/com/newcolor/qixinginfo/fragment/ShangQuanFragment$JsToAndroid.smali
+
+count of existing files:  12488
+count of total class files:  12488

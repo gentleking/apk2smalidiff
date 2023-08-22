@@ -16,26 +16,20 @@ import tempfile
 from androguard.core.bytecodes import apk
 from fuzzy_match import match
 from fuzzy_match import algorithims
-
-
-# diff_ratios = []
+from class_parser import ClassParser
 
 temp1 = ""
 temp2 = ""
-apkName = ""
+apk_name = ""
 
 fileter_word = ["field", "line", "const", "0x", "local", "nop", "array", "move", "annotation"]
+
 
 key_words = ["invoke", "method"]
 
 
-def main():
-    apk_parse()
-    class_compare()
-
-
 def apk_parse():
-    global temp1, temp2, apkName
+    global temp1, temp2, apk_name
     print("")
     print("\t\t\t apktool")
     print("")
@@ -53,8 +47,6 @@ def apk_parse():
     global args
     args = parser.parse_args()
 
-    # print(args)
-
     # Make sure the APKs exist.
     exists(args.apk1)
     exists(args.apk2)
@@ -63,22 +55,16 @@ def apk_parse():
     folderExists(args.output, True)
 
     # args.apk1 and args.apk2 are input args
-    packageName1 = getPackageName(args.apk1)
-    packageName2 = getPackageName(args.apk2)
+    # packageName1 = getPackageName(args.apk1)
+    # packageName2 = getPackageName(args.apk2)
 
-    # get apk name with version
-    apkName1 = getApkName(args.apk1)
-    apkName2 = getApkName(args.apk2)
-
-    # APK name
-    apkName = apkName1.split('-')[0]
+    # get APK name
+    apk_name = get_apk_name(args.apk1).split('-')[0]
 
     # Individual folders for each APK.
-    # temp1 = os.path.join(args.output, '/', apkName1, '/1/')
-    # temp2 = os.path.join(args.output, '/', apkName1, '/2/')
-    temp1 = args.output + "/" + apkName + '/1/'
-    temp2 = args.output + "/" + apkName + '/2/'
-    
+    temp1 = args.output + "/" + apk_name + '/1/'
+    temp2 = args.output + "/" + apk_name + '/2/'
+
     # check folder exist
     folderExists(temp1, True)
     folderExists(temp2, True)
@@ -93,22 +79,19 @@ def apk_parse():
 
     temp1 = os.path.join(temp1, "smali/")
     temp2 = os.path.join(temp2, "smali/")
-    # print(temp1, temp2)
 
 
-def getApkName(apkname):
-    apkn = apkname.split("/")[-1]
-    apkn = apkn.split(".")[0]
-    return apkn
+# get apk name with version
+def get_apk_name(apk_path):
+    return apk_path.split("/")[-1].split('.')[0]
 
 
 # get package name
-def getPackageName(filepath):
-    a = apk.APK(filepath)
-    packageName = a.get_package()
-    packageName = packageName.replace('.', '/')
-    # print("package name: " + packageName)
-    return packageName
+def get_package_name(filepath):
+    # a = apk.APK(filepath)
+    package_name = apk.APK(filepath).get_package()
+    package_name = package_name.replace('.', '/')
+    return package_name
 
 
 # use apktool to disassemble apk files
@@ -143,8 +126,9 @@ def mergefolders(root_src_dir, root_dst_dir):
 def class_compare():
     os_path1 = temp1
     os_path2 = temp2
-    fileName = "classPairOutput_" + apkName + ".txt"
-    fileName = "classPairOutput_{}.txt".format(apkName)
+    # fileName = "classPairOutput_" + apkName + ".txt"
+    fileName = "classPairOutput_{}.txt".format(apk_name)
+    # fileName = "classPairOutput_{}.txt".format('hope')
 
     file = open(fileName)
     lines = file.readlines()
@@ -166,7 +150,10 @@ def class_compare():
             if similarity > threshold:
                 content1 = reader(file_path1).splitlines(1)
                 content2 = reader(file_path2).splitlines(1)
-                
+                # class1_parser = ClassParser().class_parser(content1)
+                # class2_parser = ClassParser().class_parser(content2)
+                # diff_result = diff_with_class(class1_parser, class2_parser)
+                # print(diff_result)
                 content1 = preprocessing(content1)
                 content2 = preprocessing(content2)
                 diff = difflib.unified_diff(content1, content2, file_path1, file_path2)
@@ -177,10 +164,16 @@ def class_compare():
     print("count of total class files: ", class_count)
 
 
-# def class_parser(content):
-#     class_
-#     for line in content:
+def diff_with_class(old_class_file, new_class_file):
+    print_dict(old_class_file)
+    print_dict(new_class_file)
+    class_name_diff_result = difflib.unified_diff(old_class_file['class_name'], new_class_file['class_name'])
+    return list(class_name_diff_result)
 
+
+def print_dict(class_dict):
+    for key in class_dict:
+        print(key, class_dict[key])
 
 
 def preprocessing(content):
@@ -218,7 +211,7 @@ def filter(lines):
             filter_lines = []
 
         filter_lines.append(lines[i])
-    
+
     if flag:
         print(left_class, end="")
         print(right_class)
@@ -226,6 +219,8 @@ def filter(lines):
 
 # analyze the difference of lines
 def analyze_lines(diff_lines):
+    if not diff_lines:
+        return None
     for line in diff_lines:
         print(line, end="")
     return
@@ -241,7 +236,7 @@ def generate_diff_lines(filter_lines):
         for line in filter_lines:
             # whether contain filter word
             if not is_contain_filter_word(line):
-                #if is_contain_key_word(line):
+                # if is_contain_key_word(line):
                 # whether line is diff result
                 if line[0] == '+' or line[0] == '-':
                     diff_lines.append(line)
@@ -279,12 +274,12 @@ def is_contain_filter_word(line):
     # case1: line is none
     if not line:
         return True
-    
+
     # case2: blank line
-    substr = line[1:len(line)-1]
+    substr = line[1:len(line) - 1]
     if not substr:
         return True
-    
+
     # case3: contain filter word
     for word in fileter_word:
         if word in line:
@@ -316,4 +311,5 @@ def folderExists(path, clean=False):
 
 
 if __name__ == "__main__":
-    main()
+    apk_parse()
+    class_compare()
