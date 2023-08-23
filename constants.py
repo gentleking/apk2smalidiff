@@ -3171,7 +3171,7 @@ MODIFIER_DICT = {
     'constructor': 'A',
     'public': 'B',
     'private': 'C',
-    'protected':  'D',
+    'protected': 'D',
     'final': 'E',
     'static': 'F',
     'abstract': 'G',

@@ -1,136 +1,125 @@
 #!/usr/bin/python
+
 import difflib
 
-filter_word = ["field", "line", "const", "0x", "local", "nop", "array", "move", "annotation"]
-
-def is_end_of_element(index, line, max_len):
-    head = line.split(' ')[0]
-    # print(head)
-    if index >= max_len:
-        return True
-    return head == '.class' or head == '.super' or head == '.source' or head == '.implements' or \
-        head == '.annotation' or head == '.method' or head == '.field'
-
-
-def init_class_map(class_dict):
-    class_dict['class_name'] = []
-    class_dict['class_super'] = []
-    class_dict['class_source'] = []
-    class_dict['class_field'] = []
-    class_dict['class_implements'] = []
-    class_dict['class_annotation'] = []
-    class_dict['class_method'] = {}
+# filter_word = ["field", "line", "const", "0x", "local", "nop", "array", "move", "annotation"]
+filter_word = ['.line', '.local']
 
 
 class ClassParser:
-    def __init__(self):
-        pass
+    def __init__(self, filepath):
+        file = open(filepath, 'r', encoding='utf8', errors='ignore')
+        self.file_data = file.read().splitlines(1)
+        self.file_data = preprocessing(self.file_data)
+        self.class_file_map = {'class_name': [], 'class_super': [], 'class_source': [], 'class_field': [],
+                               'class_implements': [], 'class_annotation': [], 'class_method': {}}
+        file.close()
 
     # @staticmethod
-    def class_parser(self, file):
+    def class_parser(self):
         i = 0
-        index = ''
-        class_file = {}
-        init_class_map(class_file)
-        while i < len(file):
-            if file[i].split(' ')[0] == '.class':
-                class_file['class_name'].append(file[i])
+        while i < len(self.file_data):
+            if self.file_data[i].startswith('.class'):
+                self.class_file_map['class_name'].append(self.file_data[i])
                 i += 1
-            elif file[i].startswith('.super'):
-                class_file['class_super'].append(file[i])
+            elif self.file_data[i].startswith('.super'):
+                self.class_file_map['class_super'].append(self.file_data[i])
                 i += 1
-            elif file[i].startswith('.source'):
-                class_file['class_source'].append(file[i])
+            elif self.file_data[i].startswith('.source'):
+                self.class_file_map['class_source'].append(self.file_data[i])
                 i += 1
-            elif file[i].split(' ')[0] == '.field':
-                # print('field')
-                class_file['class_field'].append(file[i])
+            elif self.file_data[i].startswith('.field'):
+                self.class_file_map['class_field'].append(self.file_data[i])
                 i += 1
-                while not is_end_of_element(i, file[i], len(file)):
-                    class_file['class_field'].append(file[i])
-                    i += 1
-            elif file[i].split(' ')[0] == '.implements':
-                class_file['class_implements'].append(file[i])
+                # while not is_end_of_element(i, self[i], len(self)):
+                #     self.class_file_map[['class_field'].append(self[i])
+                #     i += 1
+            elif self.file_data[i].startswith('.implements'):
+                self.class_file_map['class_implements'].append(self.file_data[i])
                 i += 1
-                while not is_end_of_element(i, file[i], len(file)):
-                    class_file['class_implements'].append(file[i])
-                    i += 1
-            elif file[i].split(' ')[0] == '.annotation':
-                # print('annotaion')
-                class_file['class_annotation'].append(file[i])
+                # while not is_end_of_element(i, self[i], len(self)):
+                #     self.class_file_map[['class_implements'].append(self[i])
+                #     i += 1
+            elif self.file_data[i].startswith('.annotation'):
+                self.class_file_map['class_annotation'].append(self.file_data[i])
                 i += 1
-                while not is_end_of_element(i, file[i], len(file)):
-                    class_file['class_annotation'].append(file[i])
-                    i += 1
-            elif file[i].split(' ')[0] == '.method':
+                # while not is_end_of_element(i, self[i], len(self)):
+                #     self.class_file_map[['class_annotation'].append(self[i])
+                #     i += 1
+            elif self.file_data[i].startswith('.method'):
                 # class_file['class_method'].append(file[i])
-                method_key = file[i]
-                method_content = [file[i]]
-                # method_dict = {}
+                method_key = self.file_data[i]
+                method_content = [self.file_data[i]]
                 i += 1
-                while not is_end_of_element(i, file[i], len(file)):
-                    method_content.append(file[i])
+                while i < len(self.file_data) and is_not_end_of_element(self.file_data[i]):
+                    method_content.append(self.file_data[i])
                     i += 1
-                    if i >= len(file):
-                        break
-                # method_dict[method_key] = method_content
-                # class_file['class_method'].apppend(method_dict)
-                class_file['class_method'][method_key] = method_content
+                self.class_file_map['class_method'][method_key] = method_content
             else:
                 i += 1
-        return class_file
+        return self.class_file_map
 
 
-def main():
-    f = open('BindingFailedResolution1.smali', 'r', encoding='utf8', errors='ignore')
-    f2 = open('BindingFailedResolution2.smali', 'r', encoding='utf8', errors='ignore')
-    data = f.read().splitlines(1)
-    data2 = f2.read().splitlines(1)
-    f.close()
-    f2.close()
-    # class_file_parser = ClassParser()
-    class_file = ClassParser().class_parser(data)
-    class_file2 = ClassParser().class_parser(data2)
-    diff_result = []
-    print(class_file['class_method'])
-    print(class_file2['class_method'])
-    file1 = list(class_file['class_method'])
-    file2 = list(class_file2['class_method'])
-    # print(file1, file2)
-
-    # diff = difflib.unified_diff(class_file['class_name']), class_file2['class_name']
-    for name in class_file['class_method']:
-        file1 = class_file['class_method'][name]
-        if name in class_file2['class_method']:
-            file2 = class_file2['class_method'][name]
-            # d_result = list(difflib.unified_diff(file1, file2))
-            diff_result = diff_result + list(difflib.unified_diff(file1, file2))
-            # print(name)
-
-    # diff = difflib.unified_diff(file1, file2)
-    print(list(diff_result))
-    for d in list(diff_result):
-        if parser_filter(d):
-            print(d, end="")
-    # print(diff_result)
+def preprocessing(class_file):
+    class_file = remove_useless_element(class_file)
+    class_file = obfuscation_resistance(class_file)
+    return class_file
 
 
-def parser_filter(line):
-    if line == ' ' or line == '':
+def remove_useless_element(class_file):
+    new_class_file = []
+    for line in class_file:
+        if line != '\n':
+            new_class_file.append(line)
+
+    class_file = new_class_file
+    new_class_file = []
+    for line in class_file:
+        if is_not_contain_filter_word(line):
+            new_class_file.append(line)
+    return new_class_file
+
+
+def obfuscation_resistance(class_file):
+
+    return class_file
+
+
+def is_not_end_of_element(line):
+    if line.startswith('.class') or line.startswith('.super') or line.startswith('.source') or line.startswith(
+            ".implements") or line.startswith('.annotation') or line.startswith('.method') or line.startswith('.field'):
         return False
-    if not is_contain_filter_word(line):
-        if line[0] == '-' or line[0] == '+':
-            if line[1:-1] != '':
-                return True
-    return False
+    return True
 
 
-def is_contain_filter_word(line):
+# def parser_filter(line):
+#     if line == ' ' or line == '':
+#         return False
+#     if not is_contain_filter_word(line):
+#         if line[0] == '-' or line[0] == '+':
+#             if line[1:-1] != '':
+#                 return True
+#     return False
+
+
+def is_not_contain_filter_word(line):
     for word in filter_word:
         if word in line:
-            return True
-    return False
+            return False
+    return True
 
 
 if __name__ == '__main__':
-    main()
+    old_class_profile = ClassParser('BindingFailedResolution1.smali').class_parser()
+    new_class_profile = ClassParser('BindingFailedResolution2.smali').class_parser()
+    diff_result = []
+
+    for name in old_class_profile['class_method']:
+        file1 = old_class_profile['class_method'][name]
+        if name in new_class_profile['class_method']:
+            file2 = new_class_profile['class_method'][name]
+            diff_result = diff_result + list(difflib.unified_diff(file1, file2))
+
+    for d in list(diff_result):
+        if d[0] == '-' or d[0] == '+':
+            print(d, end="")
