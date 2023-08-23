@@ -15,7 +15,6 @@ class ClassParser:
                                'class_implements': [], 'class_annotation': [], 'class_method': {}}
         file.close()
 
-    # @staticmethod
     def class_parser(self):
         i = 0
         while i < len(self.file_data):
@@ -90,16 +89,6 @@ def is_not_end_of_element(line):
             ".implements") or line.startswith('.annotation') or line.startswith('.method') or line.startswith('.field'):
         return False
     return True
-
-
-# def parser_filter(line):
-#     if line == ' ' or line == '':
-#         return False
-#     if not is_contain_filter_word(line):
-#         if line[0] == '-' or line[0] == '+':
-#             if line[1:-1] != '':
-#                 return True
-#     return False
 
 
 def is_not_contain_filter_word(line):

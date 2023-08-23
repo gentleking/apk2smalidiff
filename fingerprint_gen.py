@@ -8,6 +8,7 @@ import collections
 from pathlib import Path
 import constants
 
+
 class Generator:
     app_exclude_list = ['androidx/', 'android/support/', 'com/android/', 'com/google/', 'javax/', 'okhttp3/']
 
@@ -53,8 +54,8 @@ class Generator:
                     dxed_path = classes_jar_path + '.tmp.jar'
                     d8('--output', dxed_path, classes_jar_path)
                 except Exception as e:
-                    print (e)
-                    print ('trying dx ...')
+                    print(e)
+                    print('trying dx ...')
 
                     dx = sh.Command('dx')
                     dxed_path = classes_jar_path + '.tmp.jar'
@@ -103,7 +104,7 @@ class Generator:
             if self.artifact_type == ARTIFACT_TYPE.APK:
                 shutil.rmtree(self.extract_path)
         except Exception as e:
-            print (e)
+            print(e)
 
     def normlize_types(self, tline):
         parts = []
@@ -114,14 +115,15 @@ class Generator:
         while i < len(tline):
             j = i
             while j < len(tline):
-                if tline[j] == ';' or tline[i:j+1] in constants.PREDEFINED_TYPE_DICT:
+                if tline[j] == ';' or tline[i:j + 1] in constants.PREDEFINED_TYPE_DICT:
                     break
                 j += 1
 
-            part = tline[i:j+1]
-            parts.append(chr(ord('M') + part.count('/')) * 3 if part not in constants.PREDEFINED_TYPE_DICT else constants.PREDEFINED_TYPE_DICT[part])
+            part = tline[i:j + 1]
+            parts.append(chr(ord('M') + part.count('/')) * 3 if part not in constants.PREDEFINED_TYPE_DICT else
+                         constants.PREDEFINED_TYPE_DICT[part])
 
-            i = j+1
+            i = j + 1
         return parts
 
     def normlize_method(self, mline):
@@ -133,7 +135,7 @@ class Generator:
                 parts.append(constants.MODIFIER_DICT[modifier])
 
         m_name_type = mline[mline.rfind(' ') + 1:]
-        if '(' not  in m_name_type or ')' not in m_name_type:
+        if '(' not in m_name_type or ')' not in m_name_type:
             return modifier
 
         params = m_name_type[m_name_type.find('(') + 1:m_name_type.rfind(')')]
@@ -147,7 +149,8 @@ class Generator:
     def normlize_invoke(self, iline):
         parts = []
         cname = iline[:iline.find('->')]
-        cname = chr(ord('M') + cname.count('/')) * 3 if cname not in constants.PREDEFINED_TYPE_DICT else constants.PREDEFINED_TYPE_DICT[cname]
+        cname = chr(ord('M') + cname.count('/')) * 3 if cname not in constants.PREDEFINED_TYPE_DICT else \
+        constants.PREDEFINED_TYPE_DICT[cname]
         parts.append(cname)
 
         m_name_type = iline[iline.find('->') + len('->'):]
@@ -193,9 +196,8 @@ class Generator:
 
                 if 'const-string' in line:
                     cstr = line[line.find('"') + 1:line.rfind('"')]
-                    constants.add(cstr[:32]) # we don't expect super long strings here.
+                    constants.add(cstr[:32])  # we don't expect super long strings here.
 
-                
                 if line.startswith('.super '):
                     tps = self.normlize_types(line[line.find('.super ') + len('.super '):])
                     constants.add('K%s' % ''.join(tps))
@@ -221,6 +223,6 @@ class Generator:
 
     def dump_fingerprints(self):
         for module_name, fingerprints in self.module_fingerprints.items():
-            print ('module: %s' % module_name)
+            print('module: %s' % module_name)
             for _, fingerprint in fingerprints.items():
-                print ('\t fingerprint: %s' % fingerprint)
+                print('\t fingerprint: %s' % fingerprint)
